@@ -101,3 +101,81 @@ class Obstacle():
 			j > (-1 +self.r + self.c)):
 			return False
 		return True
+def getMatrixIndices(self, node):
+		x,y,a = node[1], node[2], node[3]
+		shiftx, shifty = 0,0
+		x += shiftx
+		y = abs(shifty + y)
+		i = int(round(y/self.threshold))
+		j = int(round(x/self.threshold))
+		k = int(round(a/self.thetaStep))
+		return i,j,k
+
+	def checkVisited(self, node):
+		i,j,k = self.getMatrixIndices(node)
+		if self.explored[i, j, 3] != 0:
+			return True 
+		else:
+			return False 
+
+	def findVisited(self, node):
+		i,j,k = self.getMatrixIndices(node)
+		return self.explored[i, j, :], self.actionIndexMatrix[i,j]
+
+	def addVisited(self, node, parentNode, actionIndex):
+		i,j,k = self.getMatrixIndices(node)
+		self.plotData_X.append(parentNode[1])
+		self.plotData_Y.append(parentNode[2])
+		self.plotData_A.append(parentNode[3])
+		self.whcihAction.append(actionIndex)
+		self.explored[i, j, :] = np.array(parentNode)
+		self.actionIndexMatrix[i,j] = actionIndex
+		return
+
+	def plotPath(self, path, trackIndex):
+		print(len(trackIndex), len(path))
+		for i in range(len(path)):
+			Xi = path[i][1]
+			Yi = path[i][2]
+			Thetai = path[i][3]
+			actionIndex = int(trackIndex[i])
+			UL, UR = self.actions[actionIndex][0], self.actions[actionIndex][1]
+			self.plotCurve(Xi, Yi, Thetai, UL, UR, color="red", lw=1.2)
+			plt.pause(0.001)
+		plt.ioff()
+		plt.show(block=False)
+		pass
+
+	def explorationPlot(self):
+		for i in range(len(self.plotData_X)):
+			Xi = self.plotData_X[i]
+			Yi = self.plotData_Y[i]
+			Thetai = self.plotData_A[i]
+			actionIndex = self.whcihAction[i]
+			UL, UR = self.actions[actionIndex][0], self.actions[actionIndex][1]
+			self.plotCurve(Xi, Yi, Thetai, UL, UR)
+			if i%100==0:
+				plt.pause(0.000001)
+		pass
+
+	def plotCurve(self, Xi, Yi, Thetai, UL, UR,color="blue",lw=0.5):
+		r = self.wheelRadius
+		L = self.wheelLength
+		t = 0
+		dt = 0.1
+		Xn = Xi
+		Yn = Yi
+		Thetan = math.pi * Thetai / 180
+		x_s, x_n, y_s, y_n = [],[],[],[] 
+		while t<1:
+			t = t + dt
+			Xs = Xn
+			Ys = Yn
+			Xn += 0.5 * r * (UL + UR) * math.cos(Thetan) * dt
+			Yn += 0.5 * r * (UL + UR) * math.sin(Thetan) * dt
+			Thetan += (r / L) * (UR - UL) * dt
+			x_s.append(Xs)
+			x_n.append(Xn)
+			y_s.append(Ys)
+			y_n.append(Yn)
+		self.ax.plot([x_s, x_n], [y_s, y_n], color=color, linewidth=lw)
