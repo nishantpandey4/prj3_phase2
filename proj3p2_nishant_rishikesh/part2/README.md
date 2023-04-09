@@ -20,7 +20,7 @@ Source the workspace.
 To run A* path planning algorithm run the below from src folder the workspace:
 
 ```bash
-$ cd proj3_phase2/scripts/
+$ cd proj3p2_nishant_rishikesh/part1/
 $ python3 Phase2.py --Start="[0,0,30]" --End="[5,0,0]" --RPM="[10,15]"
 ```
 
