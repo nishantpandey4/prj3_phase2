@@ -236,3 +236,45 @@ def getMatrixIndices(self, node):
 			angle = 180 * (angle) / math.pi
 			self.actionSet.append([x, y, angle, costToCome, index])
 			index += 1
+    def initialCheck(self):
+		if not self.obstacle.ObsCheck(self.goal[0], self.goal[1]):
+			print("Goal in obstacle field")
+			return False
+		elif not self.obstacle.ObsCheck(self.initial[0], self.initial[1]):
+			print("Initial position in obstacle field")
+			return False
+		else:
+			cost = math.sqrt((self.initial[0] - self.goal[0])**2 + (self.initial[1] - self.goal[1])**2)
+			heappush(self.Data, [cost, self.initial[0], self.initial[1], self.initial[2], 0])
+			self.nodeData.append([self.initial[0], self.initial[1], self.initial[2], 0])
+			return True
+
+	def heuristics(self, current): 
+		h = self.weight * math.sqrt((current[1] - self.goal[0])**2 + (current[2] - self.goal[1])**2)
+        
+		return h
+
+	def goalReached(self, current):  
+		x, y = current[1], current[2]
+		if (x - self.goal[0])**2 + (y - self.goal[1])**2 <= (self.goalThreshold)**2:
+			return True
+		else:
+			return False
+
+	def trackBack(self, presentNode):
+		track = []
+		trackIndex = []
+		currentNode = presentNode[:4]
+		track.append(currentNode)
+		trackIndex.append(0)
+		while currentNode[1:] != self.initial:
+		
+			l, ind = self.obstacle.findVisited(currentNode)
+			currentNode = list(l)
+			track.append(currentNode)
+			trackIndex.append(ind)
+		print("-------------------")
+		print("Backtracking")
+		track.reverse()
+		trackIndex.reverse()
+		return track, trackIndex
