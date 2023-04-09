@@ -33,7 +33,7 @@ $ python3 Phase2.py --Start="[0,0,30]" --End="[5,0,0]" --RPM="[10,15]"
 
 Make the node as executable by running the following from src folder in the workspace:
 ```bash
-$ cd proj3_phase2/scripts/
+$ cd proj3_phase2/part2/scripts/
 $ chmod +x node.py
 ```
 
