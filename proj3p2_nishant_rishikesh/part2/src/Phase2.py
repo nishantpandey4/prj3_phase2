@@ -278,3 +278,96 @@ def getMatrixIndices(self, node):
 		track.reverse()
 		trackIndex.reverse()
 		return track, trackIndex
+def findPath(self):
+		counter = 0
+		if self.initialCheck():
+			while len(self.Data)>0:
+				counter+=1
+				presentNode = heappop(self.Data)
+				previousCost, previousCostToCome = presentNode[0], presentNode[4]
+				if self.goalReached(presentNode):
+					self.goalReach = True
+					print(" Goal Reached ")
+					self.path, self.trackIndex = self.trackBack(presentNode)
+					if self.showExploration:
+						self.obstacle.explorationPlot()
+					if self.showPath:
+						self.obstacle.plotPath(self.path, self.trackIndex)
+					return
+				self.setActions(presentNode)
+				for action in self.actionSet:
+					newNodeX = action[0]
+					newNodeY = action[1]
+					newNodeA = action[2]
+					newNode = [0, newNodeX, newNodeY, newNodeA, 0]
+					newCostToCome = previousCostToCome + action[3]
+					newNode[4] = newCostToCome
+					costToGo = self.heuristics(newNode)
+					if self.obstacle.ObsCheck(newNodeX, newNodeY):
+						if not self.obstacle.checkVisited(newNode):
+							presentNode[0] = newCostToCome
+							self.obstacle.addVisited(newNode, presentNode[:4], action[4])
+							newNode[0] = newCostToCome + costToGo
+							heappush(self.Data, newNode)
+						else: 
+							previousVisited,_ = self.obstacle.findVisited(newNode)
+							previousCost = previousVisited[0]
+							if previousCost > newCostToCome:
+								presentNode[0] = newCostToCome
+								self.obstacle.addVisited(newNode, presentNode[:4], action[4])
+		print("Could not reach goal..") 
+		return
+
+if __name__ == '__main__':
+	Parser = argparse.ArgumentParser()
+	Parser.add_argument('--Start', default="[0,0,30]", help='Inital location')
+	Parser.add_argument('--End', default="[5,0,0]", help='Goal location')
+	Parser.add_argument('--RobotRadius', default=0.178, help='Robot radius')
+	Parser.add_argument('--Clearance', default=0.05, help='Clearance')
+	Parser.add_argument('--ShowExploration', default=1, help='1 for exploration animation else 0')
+	Parser.add_argument('--ShowPath', default=1, help='1 to show explored path else 0')
+	Parser.add_argument('--thetaStep', default=30, help='Possibilities of action for angle')
+	Parser.add_argument('--StepSize', default=1, help='Step size')
+	Parser.add_argument('--Threshold', default=0.01, help='Threshold value for appriximation')
+	Parser.add_argument('--GoalThreshold', default=0.1, help='Threshold for goal')
+	Parser.add_argument('--WheelRadius', default=0.038, help='Radius of the robot wheel in meters')
+	Parser.add_argument('--WheelLength', default=0.320, help='wheelbase')
+	Parser.add_argument('--RPM', default="[15,18]", help='RPM values')
+	Parser.add_argument('--Weight', default=1.3, help='Weight for cost to go')
+	Args = Parser.parse_args()
+
+	start = Args.Start
+	end = Args.End
+	r = float(Args.RobotRadius)
+	c = float(Args.Clearance)
+	StepSize = int(Args.StepSize)
+	Threshold = float(Args.Threshold)
+	GoalThreshold = float(Args.GoalThreshold)
+
+	initial = [float(i) for i in start[1:-1].split(',')]
+	goal = [float(i) for i in end[1:-1].split(',')] 
+	print(initial)
+	print(goal)
+	wheelLength = float(Args.WheelLength) 
+	
+	rpm = [float(i) for i in Args.RPM[1:-1].split(',')]
+	Ur, Ul = rpm[0], rpm[1]
+
+	wheelRadius = float(Args.   WheelRadius)
+	weight = float(Args.Weight)
+
+	solver = pathFinder(initial, goal, stepSize=StepSize,
+		goalThreshold = GoalThreshold, width = 6, height = 2, threshold = Threshold,
+		r=r, c=c, wheelLength = wheelLength, Ur = Ur, Ul = Ul, wheelRadius = wheelRadius,
+		weight = weight, showExploration=int(Args.ShowExploration), showPath=int(Args.ShowPath))
+	solver.findPath()
+	print(solver.trackIndex)
+	l = wheelLength
+	r = wheelRadius
+	for idx in solver.trackIndex:
+		ul, ur = solver.actions[int(idx)] 
+		vx = r*0.5*(ur+ul)
+		rz = r*(ur-ul)/l
+		print(ul,ur,vx,rz)
+
+
