@@ -101,7 +101,7 @@ class Obstacle():
 			j > (-1 +self.r + self.c)):
 			return False
 		return True
-def getMatrixIndices(self, node):
+	def getMatrixIndices(self, node):
 		x,y,a = node[1], node[2], node[3]
 		shiftx, shifty = 0,0
 		x += shiftx
@@ -179,7 +179,8 @@ def getMatrixIndices(self, node):
 			y_s.append(Ys)
 			y_n.append(Yn)
 		self.ax.plot([x_s, x_n], [y_s, y_n], color=color, linewidth=lw)
-  class pathFinder():
+
+class pathFinder():
 	def __init__(self, initial, goal, thetaStep = 30, stepSize = 1, goalThreshold = 0.1,
 		width = 6, height = 2, threshold = 0.5, r = 0.1, c = 0.1, wheelLength = 0.038, 
 		Ur=18,Ul=15, wheelRadius=2, dt=0.1, dtheta=0, weight=1, showExploration=0, showPath=1):
@@ -236,7 +237,8 @@ def getMatrixIndices(self, node):
 			angle = 180 * (angle) / math.pi
 			self.actionSet.append([x, y, angle, costToCome, index])
 			index += 1
-    def initialCheck(self):
+
+	def initialCheck(self):
 		if not self.obstacle.ObsCheck(self.goal[0], self.goal[1]):
 			print("Goal in obstacle field")
 			return False
@@ -278,7 +280,8 @@ def getMatrixIndices(self, node):
 		track.reverse()
 		trackIndex.reverse()
 		return track, trackIndex
-def findPath(self):
+
+	def findPath(self):
 		counter = 0
 		if self.initialCheck():
 			while len(self.Data)>0:
