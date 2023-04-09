@@ -179,3 +179,60 @@ def getMatrixIndices(self, node):
 			y_s.append(Ys)
 			y_n.append(Yn)
 		self.ax.plot([x_s, x_n], [y_s, y_n], color=color, linewidth=lw)
+  class pathFinder():
+	def __init__(self, initial, goal, thetaStep = 30, stepSize = 1, goalThreshold = 0.1,
+		width = 6, height = 2, threshold = 0.5, r = 0.1, c = 0.1, wheelLength = 0.038, 
+		Ur=18,Ul=15, wheelRadius=2, dt=0.1, dtheta=0, weight=1, showExploration=0, showPath=1):
+		self.initial = initial
+		self.goal = goal
+		self.nodeData = []
+		self.weight = weight
+		self.Data = []
+		self.allData = []
+		self.thetaStep = thetaStep
+		self.dt=dt
+		self.dtheta=dtheta
+		self.wheelRadius=wheelRadius
+		self.wheelLength=wheelLength
+		self.Ur=Ur
+		self.Ul=Ul
+		self.stepSize = stepSize
+		self.goalThreshold = goalThreshold
+		self.path = []
+		self.trackIndex = []
+		self.goalReach = False
+		self.actions = [[	   0 , self.Ur],
+						[self.Ul , 		 0],
+						[	   0 , self.Ul],
+						[self.Ur , 		 0],
+						[self.Ul , self.Ur],
+						[self.Ur , self.Ul],
+						[self.Ur , self.Ur],
+						[self.Ul , self.Ul]]
+		self.actionSet = []
+		self.obstacle = Obstacle(width, height, r = r, c = c, threshold=threshold, 
+			actions=self.actions, wheelLength = self.wheelLength, 
+			wheelRadius = self.wheelRadius)
+		self.showExploration = showExploration
+		self.showPath = showPath
+
+	def setActions(self, presentNode):
+		self.actionSet = []
+		index = 0
+		for action in self.actions:
+			t = 0
+			dt = 0.1
+			x, y, angle = presentNode[1], presentNode[2], presentNode[3]
+			angle = math.pi*angle/180.0 
+			costToCome = 0
+			for i in range(10):
+				t = t+dt
+				xnew = 0.5*(self.wheelRadius)*(action[0]+action[1])*math.cos(angle)*dt
+				ynew = 0.5*(self.wheelRadius)*(action[0]+action[1])*math.sin(angle)*dt
+				x += xnew       
+				y += ynew      
+				angle += (self.wheelRadius/self.wheelLength)*(action[1]-action[0])*dt              
+				costToCome += math.sqrt(xnew ** 2 + ynew ** 2)
+			angle = 180 * (angle) / math.pi
+			self.actionSet.append([x, y, angle, costToCome, index])
+			index += 1
