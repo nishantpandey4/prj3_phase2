@@ -47,9 +47,5 @@ roslaunch proj3_phase2 proj3phase2.launch start:="[0,0,30]" end:="[5,0,0]" RPM:=
 - Similarly the goal location can be specified using the "end" argument.
 - The "RPM" argument can be used to specify both the RPM values.
 
-### Github Link
-
-https://github.com/nishantpandey4/prj3_phase2.git
-
 ### Video link 
 https://drive.google.com/drive/folders/17qJBgX0-oyyZXjs0hwa5U_dFdOoDMzCe?usp=share_link 
