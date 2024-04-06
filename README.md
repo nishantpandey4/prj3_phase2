@@ -3,11 +3,11 @@
 ### Nishant Pandey 
 ### Rishikesh Jadhav 
 
-ROS-noetic was used for this project
-
-# Libraries used
-numpy
-matplotlib
+### Dependencies:
+Ubuntu 20.04
+ROS - Noetic
+Turtlebot 3
+Gazebo and RViz
 
 ## INSTRUCTIONS TO RUN
 
