@@ -1,11 +1,10 @@
-# ENPM 661 Project-3 Phase2
 
 ## Team Members
-### Nishant Pandey (UID: 119247556),npandey2
-### Rishikesh Jadhav (UID: 119256534),rjadhav1
+### Nishant Pandey 
+### Rishikesh Jadhav 
 
 # Folder structure
-proj3p2_nishant_rishikesh -> part2 ->src,world,launch
+A-star Simulation -> part2 ->src,world,launch
 # Libraries used
 numpy
 matplotlib
