@@ -3,8 +3,8 @@
 ### Nishant Pandey 
 ### Rishikesh Jadhav 
 
-# Folder structure
-A-star Simulation -> part2 ->src,world,launch
+ROS-noetic was used for this project
+
 # Libraries used
 numpy
 matplotlib
